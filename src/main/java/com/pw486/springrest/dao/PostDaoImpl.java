@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public class PostDaoImpl implements PostDao<Post> {
+
   private static final long serialVersionUID = 1L;
 
   private EntityManager entityManager;
@@ -22,11 +23,13 @@ public class PostDaoImpl implements PostDao<Post> {
 
   @Override
   public List<Post> getAll() {
-    return (List<Post>) entityManager.createQuery("from Post").getResultList();
+    return entityManager.createQuery("from Post", Post.class).getResultList();
   }
 
   @Override
   public Post findById(long id) {
-    return (Post) entityManager.createQuery("from Post where id = ?1").setParameter(1, id).getSingleResult();
+    return entityManager.createQuery("from Post where id = ?1", Post.class).setParameter(1, id)
+            .getSingleResult();
   }
+
 }

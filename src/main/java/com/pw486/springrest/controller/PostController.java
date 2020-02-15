@@ -1,17 +1,11 @@
 package com.pw486.springrest.controller;
 
-import com.pw486.springrest.dao.PostDaoImpl;
 import com.pw486.springrest.entity.Post;
-import com.pw486.springrest.exception.ResourceNotFoundException;
-import com.pw486.springrest.repository.PostRepository;
 import com.pw486.springrest.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,54 +14,37 @@ import java.util.List;
 public class PostController {
 
   @Autowired
-  PostRepository postRepository;
-
-  @Autowired
   PostService postService;
-
-  @PersistenceContext
-  EntityManager entityManager;
-
-  PostDaoImpl dao;
-
-  @PostConstruct
-  public void init() {
-    dao = new PostDaoImpl(entityManager);
-  }
 
   @GetMapping("/posts")
   public List<Post> getAllPost() {
-//    return postRepository.findAll();
-//    return dao.getAll();
-//    return postRepository.findAllOrderByTitle();
-    return postService.getAll();
+    return postService.findAll();
   }
 
   @GetMapping("/posts/{id}")
   public Post getPostById(@PathVariable("id") Long postId) {
-    return dao.findById(postId);
+    return postService.findById(postId);
   }
 
   @PostMapping("/posts")
   public Post createPost(@Valid @RequestBody Post post) {
-    return postRepository.save(post);
+    return postService.save(post);
   }
 
   @PutMapping("/posts/{id}")
-  public Post updatePost(@PathVariable("id") Long postId, @Valid @RequestBody Post postDetail) {
-    Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+  public Post updatePost(@PathVariable("id") Long postId, @Valid @RequestBody Post postData) {
+    Post post = postService.findById(postId);
+    post.setTitle(postData.getTitle());
+    post.setText(postData.getText());
 
-    post.setTitle(postDetail.getTitle());
-    post.setText(postDetail.getText());
-
-    return postRepository.save(post);
+    return postService.save(post);
   }
 
   @DeleteMapping("/posts/{id}")
   public ResponseEntity<?> deletePost(@PathVariable("id") Long postId) {
-    Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+    Post post = postService.findById(postId);
+    postService.delete(post);
 
-    postRepository.delete(post);
     return ResponseEntity.ok().build();
   }
 

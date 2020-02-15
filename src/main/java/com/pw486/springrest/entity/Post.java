@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "posts")
 public class Post {
+
   @Id()
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
@@ -69,4 +70,5 @@ public class Post {
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
   }
+
 }
