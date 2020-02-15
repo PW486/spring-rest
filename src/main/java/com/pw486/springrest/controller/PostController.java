@@ -4,6 +4,7 @@ import com.pw486.springrest.dao.PostDaoImpl;
 import com.pw486.springrest.entity.Post;
 import com.pw486.springrest.exception.ResourceNotFoundException;
 import com.pw486.springrest.repository.PostRepository;
+import com.pw486.springrest.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class PostController {
   @Autowired
   PostRepository postRepository;
 
+  @Autowired
+  PostService postService;
+
   @PersistenceContext
   EntityManager entityManager;
 
@@ -35,7 +39,8 @@ public class PostController {
   public List<Post> getAllPost() {
 //    return postRepository.findAll();
 //    return dao.getAll();
-    return postRepository.findAllOrderByTitle();
+//    return postRepository.findAllOrderByTitle();
+    return postService.getAll();
   }
 
   @GetMapping("/posts/{id}")
