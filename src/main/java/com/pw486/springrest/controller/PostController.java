@@ -24,8 +24,7 @@ public class PostController {
 
   @GetMapping("/posts/{id}")
   public Post getPostById(@PathVariable("id") Long postId) {
-    return postRepository.findById(postId)
-            .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+    return postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
   }
 
   @PostMapping("/posts")
@@ -34,25 +33,20 @@ public class PostController {
   }
 
   @PutMapping("/posts/{id}")
-  public Post updatePost(@PathVariable(value = "id") Long postId,
-                         @Valid @RequestBody Post postDetails) {
+  public Post updatePost(@PathVariable("id") Long postId, @Valid @RequestBody Post postDetail) {
+    Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
 
-    Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
-
-    post.setTitle(postDetails.getTitle());
-    post.setText(postDetails.getText());
+    post.setTitle(postDetail.getTitle());
+    post.setText(postDetail.getText());
 
     return postRepository.save(post);
   }
 
   @DeleteMapping("/posts/{id}")
   public ResponseEntity<?> deletePost(@PathVariable("id") Long postId) {
-    Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+    Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
 
     postRepository.delete(post);
-
     return ResponseEntity.ok().build();
   }
 
