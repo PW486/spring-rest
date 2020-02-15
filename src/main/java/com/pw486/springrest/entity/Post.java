@@ -1,7 +1,7 @@
 package com.pw486.springrest.entity;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,12 +22,12 @@ public class Post {
 
   @Column(nullable = false, updatable = false)
   @Temporal(TemporalType.TIMESTAMP)
-  @CreatedDate
+  @CreationTimestamp
   public Date createdAt;
 
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
-  @LastModifiedDate
+  @UpdateTimestamp
   public Date updatedAt;
 
   public Long getId() {
